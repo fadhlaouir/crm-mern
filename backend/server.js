@@ -8,6 +8,7 @@ var multer = require("multer"),
     path = require("path");
 var mongoose = require("mongoose");
 
+// Connect to DB
 mongoose.connect("mongodb://localhost/productDB");
 var fs = require("fs");
 var item = require("./model/item.js");
@@ -206,7 +207,7 @@ app.post("/add-item", upload.any(), (req, res) => {
             req.body.name &&
             req.body.desc &&
             req.body.price &&
-            req.body.quantity &&
+            req.body.quantity
             // req.body.quote
         ) {
             let new_item = new item();
@@ -254,7 +255,7 @@ app.post("/update-item", upload.any(), (req, res) => {
             req.body.desc &&
             req.body.price &&
             req.body.id &&
-            req.body.quantity &&
+            req.body.quantity
             // req.body.quote
         ) {
             item.findById(req.body.id, (err, new_item) => {
