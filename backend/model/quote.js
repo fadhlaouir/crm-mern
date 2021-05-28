@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 quoteSchema = new Schema({
         client: String,
         total: Number,
-        Reduction: String,
+        Reduction: Number,
         Status: String,
         user_id: Schema.ObjectId,
         is_delete: {

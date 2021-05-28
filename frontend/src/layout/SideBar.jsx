@@ -10,6 +10,7 @@ import Items from "../components/Items";
 import Companies from "../components/Companies";
 import Contacts from "../components/Contacts";
 import { useHistory } from "react-router-dom";
+import Quote from "../components/Quote";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -101,7 +102,7 @@ export default function VerticalTabs() {
         <Contacts />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Quote
+        <Quote />
       </TabPanel>
     </div>
   );

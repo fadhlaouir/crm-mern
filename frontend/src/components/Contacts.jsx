@@ -14,11 +14,12 @@ import {
   TableRow,
   TableCell,
 } from "@material-ui/core";
+
 import { Pagination } from "@material-ui/lab";
 import swal from "sweetalert";
 const axios = require("axios");
 
-export default class Dashboard extends Component {
+export default class Contact extends Component {
   constructor() {
     super();
     this.state = {
@@ -26,18 +27,16 @@ export default class Dashboard extends Component {
       openContactModal: false,
       openContactEditModal: false,
       id: "",
+      loading: false,
       firstName: "",
       lastName: "",
       email: "",
       phone: "",
       company: "",
-      file: "",
-      fileName: "",
       page: 1,
       search: "",
       contacts: [],
       pages: 0,
-      loading: false,
     };
   }
 
@@ -123,6 +122,11 @@ export default class Dashboard extends Component {
     });
   };
 
+  logOut = () => {
+    localStorage.setItem("token", null);
+    this.props.history.push("/");
+  };
+
   onChange = (e) => {
     if (e.target.files && e.target.files[0] && e.target.files[0].name) {
       this.setState({ fileName: e.target.files[0].name }, () => {});
@@ -136,15 +140,12 @@ export default class Dashboard extends Component {
   };
 
   addContact = () => {
-    const fileInput = document.querySelector("#fileInput");
     const file = new FormData();
-    file.append("file", fileInput.files[0]);
     file.append("firstName", this.state.firstName);
     file.append("lastName", this.state.lastName);
     file.append("email", this.state.email);
     file.append("phone", this.state.phone);
     file.append("company", this.state.company);
-
     axios
       .post("http://localhost:2000/add-contact", file, {
         headers: {
@@ -167,7 +168,6 @@ export default class Dashboard extends Component {
             email: "",
             phone: "",
             company: "",
-            file: null,
             page: 1,
           },
           () => {
@@ -186,10 +186,8 @@ export default class Dashboard extends Component {
   };
 
   updateContact = () => {
-    const fileInput = document.querySelector("#fileInput");
     const file = new FormData();
     file.append("id", this.state.id);
-    file.append("file", fileInput.files[0]);
     file.append("firstName", this.state.firstName);
     file.append("lastName", this.state.lastName);
     file.append("email", this.state.email);
@@ -212,14 +210,7 @@ export default class Dashboard extends Component {
 
         this.handleContactEditClose();
         this.setState(
-          {
-            firstName: "",
-            lastName: "",
-            email: "",
-            phone: "",
-            company: "",
-            file: null,
-          },
+          { firstName: "", lastName: "", email: "", phone: "", company: "" },
           () => {
             this.getContacts();
           }
@@ -244,7 +235,6 @@ export default class Dashboard extends Component {
       email: "",
       phone: "",
       company: "",
-      fileName: "",
     });
   };
 
@@ -261,7 +251,6 @@ export default class Dashboard extends Component {
       email: data.email,
       phone: data.phone,
       company: data.company,
-      fileName: data.image,
     });
   };
 
@@ -275,13 +264,20 @@ export default class Dashboard extends Component {
         {this.state.loading && <LinearProgress size={40} />}
         <div>
           <Button
-            className="button_style"
             variant="contained"
-            color="primary"
             size="small"
+            style={{ color: "red" }}
             onClick={this.handleContactOpen}
           >
             Add Contact
+          </Button>
+          <Button
+            className="button_style"
+            variant="contained"
+            size="small"
+            onClick={this.logOut}
+          >
+            Log Out
           </Button>
         </div>
 
@@ -301,7 +297,7 @@ export default class Dashboard extends Component {
               name="firstName"
               value={this.state.firstName}
               onChange={this.onChange}
-              placeholder="Contact firstName"
+              placeholder="firstName"
               required
             />
             <br />
@@ -318,14 +314,15 @@ export default class Dashboard extends Component {
             <br />
             <TextField
               id="standard-basic"
-              type="email"
+              type="text"
               autoComplete="off"
               name="email"
               value={this.state.email}
               onChange={this.onChange}
-              placeholder="Email"
+              placeholder="email"
               required
             />
+
             <br />
             <TextField
               id="standard-basic"
@@ -349,23 +346,6 @@ export default class Dashboard extends Component {
               required
             />
             <br />
-            <Button variant="contained" component="label">
-              {" "}
-              Upload
-              <input
-                id="standard-basic"
-                type="file"
-                accept="image/*"
-                name="file"
-                value={this.state.file}
-                onChange={this.onChange}
-                id="fileInput"
-                placeholder="File"
-                hidden
-              />
-            </Button>
-            &nbsp;
-            {this.state.fileName}
           </DialogContent>
 
           <DialogActions>
@@ -422,7 +402,7 @@ export default class Dashboard extends Component {
             <br />
             <TextField
               id="standard-basic"
-              type="email"
+              type="text"
               autoComplete="off"
               name="email"
               value={this.state.email}
@@ -430,6 +410,7 @@ export default class Dashboard extends Component {
               placeholder="email"
               required
             />
+
             <br />
             <TextField
               id="standard-basic"
@@ -453,27 +434,6 @@ export default class Dashboard extends Component {
               required
             />
             <br />
-            <Button variant="contained" component="label">
-              {" "}
-              Upload
-              <input
-                id="standard-basic"
-                type="file"
-                accept="image/*"
-                // inputProps={{
-                //   accept: "image/*"
-                // }}
-                name="file"
-                value={this.state.file}
-                onChange={this.onChange}
-                id="fileInput"
-                placeholder="File"
-                hidden
-                required
-              />
-            </Button>
-            &nbsp;
-            {this.state.fileName}
           </DialogContent>
 
           <DialogActions>
@@ -486,8 +446,7 @@ export default class Dashboard extends Component {
                 this.state.lastName == "" ||
                 this.state.email == "" ||
                 this.state.phone == "" ||
-                this.state.company == "" ||
-                this.state.file == null
+                this.state.company == ""
               }
               onClick={(e) => this.addContact()}
               color="primary"
@@ -508,7 +467,7 @@ export default class Dashboard extends Component {
             name="search"
             value={this.state.search}
             onChange={this.onChange}
-            placeholder="Search by Contact name"
+            placeholder="Search by contact name"
             required
           />
           <Table aria-label="simple table">
@@ -519,7 +478,7 @@ export default class Dashboard extends Component {
                 <TableCell align="center">email</TableCell>
                 <TableCell align="center">phone</TableCell>
                 <TableCell align="center">company</TableCell>
-                <TableCell align="center">Action</TableCell>
+                <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -528,13 +487,7 @@ export default class Dashboard extends Component {
                   <TableCell align="center" component="th" scope="row">
                     {row.firstName}
                   </TableCell>
-                  <TableCell align="center">
-                    <img
-                      src={`http://localhost:2000/${row.image}`}
-                      width="70"
-                      height="70"
-                    />
-                  </TableCell>
+
                   <TableCell align="center">{row.lastName}</TableCell>
                   <TableCell align="center">{row.email}</TableCell>
                   <TableCell align="center">{row.phone}</TableCell>

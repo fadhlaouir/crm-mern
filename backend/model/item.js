@@ -7,10 +7,7 @@ ItemSchema = new Schema({
         price: Number,
         image: String,
         quantity: Number,
-        quote: {
-            type: Schema.Types.ObjectId,
-            ref: "quote"
-        },
+        quote: String,
         user_id: Schema.ObjectId,
         is_delete: {
             type: Boolean,

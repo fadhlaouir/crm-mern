@@ -143,7 +143,7 @@ export default class Companies extends Component {
     file.append("name", this.state.name);
     file.append("address", this.state.address);
     file.append("zipCode", this.state.zipCode);
-    file.append("country", this.state.address);
+    file.append("country", this.state.country);
 
     axios
       .post("http://localhost:2000/add-company", file, {
@@ -183,7 +183,7 @@ export default class Companies extends Component {
     file.append("name", this.state.name);
     file.append("address", this.state.address);
     file.append("zipCode", this.state.zipCode);
-    file.append("country", this.state.address);
+    file.append("country", this.state.country);
 
     axios
       .post("http://localhost:2000/update-company", file, {

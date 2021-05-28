@@ -30,6 +30,7 @@ export default class Item extends Component {
       desc: "",
       price: "",
       quantity: "",
+      quote: "",
       file: "",
       fileName: "",
       page: 1,
@@ -142,7 +143,7 @@ export default class Item extends Component {
     file.append("desc", this.state.desc);
     file.append("quantity", this.state.quantity);
     file.append("price", this.state.price);
-
+    file.append("quote", this.state.quote);
     axios
       .post("http://localhost:2000/add-item", file, {
         headers: {
@@ -159,7 +160,15 @@ export default class Item extends Component {
 
         this.handleItemClose();
         this.setState(
-          { name: "", desc: "", quantity: "", price: "", file: null, page: 1 },
+          {
+            name: "",
+            desc: "",
+            quantity: "",
+            quote: "",
+            price: "",
+            file: null,
+            page: 1,
+          },
           () => {
             this.getItem();
           }
@@ -184,7 +193,7 @@ export default class Item extends Component {
     file.append("desc", this.state.desc);
     file.append("quantity", this.state.quantity);
     file.append("price", this.state.price);
-
+    file.append("quote", this.state.quote);
     axios
       .post("http://localhost:2000/update-item", file, {
         headers: {
@@ -201,7 +210,15 @@ export default class Item extends Component {
 
         this.handleItemEditClose();
         this.setState(
-          { name: "", desc: "", quantity: "", price: "", file: null },
+          {
+            name: "",
+            desc: "",
+            quantity: "",
+            quote: "",
+            price: "",
+            file: null,
+            page: 1,
+          },
           () => {
             this.getItem();
           }
@@ -226,6 +243,7 @@ export default class Item extends Component {
       price: "",
       quantity: "",
       fileName: "",
+      quote: "",
     });
   };
 
@@ -242,6 +260,7 @@ export default class Item extends Component {
       price: data.price,
       quantity: data.quantity,
       fileName: data.image,
+      quote: data.quote,
     });
   };
 
@@ -318,6 +337,16 @@ export default class Item extends Component {
               required
             />
             <br />
+            <TextField
+              id="standard-basic"
+              type="text"
+              autoComplete="off"
+              name="quote"
+              value={this.state.quote}
+              onChange={this.onChange}
+              placeholder="quote"
+              required
+            />
             <br />
             <Button variant="contained" component="label">
               {" "}
@@ -347,7 +376,8 @@ export default class Item extends Component {
                 this.state.name == "" ||
                 this.state.desc == "" ||
                 this.state.quantity == "" ||
-                this.state.price == ""
+                this.state.price == "" ||
+                this.state.quote == ""
               }
               onClick={(e) => this.updateItem()}
               color="primary"
@@ -411,6 +441,16 @@ export default class Item extends Component {
               required
             />
             <br />
+            <TextField
+              id="standard-basic"
+              type="text"
+              autoComplete="off"
+              name="quote"
+              value={this.state.quote}
+              onChange={this.onChange}
+              placeholder="quote"
+              required
+            />
             <br />
             <Button variant="contained" component="label">
               {" "}
@@ -445,6 +485,7 @@ export default class Item extends Component {
                 this.state.desc == "" ||
                 this.state.quantity == "" ||
                 this.state.price == "" ||
+                this.state.quote == "" ||
                 this.state.file == null
               }
               onClick={(e) => this.addItem()}
@@ -477,6 +518,7 @@ export default class Item extends Component {
                 <TableCell align="center">Description</TableCell>
                 <TableCell align="center">Price</TableCell>
                 <TableCell align="center">quantity</TableCell>
+                <TableCell align="center">quote</TableCell>
                 <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
@@ -496,6 +538,7 @@ export default class Item extends Component {
                   <TableCell align="center">{row.desc}</TableCell>
                   <TableCell align="center">{row.price}</TableCell>
                   <TableCell align="center">{row.quantity}</TableCell>
+                  <TableCell align="center">{row.quote}</TableCell>
                   <TableCell align="center">
                     <Button
                       className="button_style"

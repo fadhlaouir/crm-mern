@@ -6,10 +6,7 @@ contactSchema = new Schema({
         lastName: String,
         email: String,
         phone: Number,
-        company: {
-            type: Schema.Types.ObjectId,
-            ref: "company"
-        },
+        company: String,
         user_id: Schema.ObjectId,
         is_delete: {
             type: Boolean,
